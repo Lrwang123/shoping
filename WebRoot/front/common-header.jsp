@@ -12,22 +12,22 @@
 						data-responsive="true">
 						<ul class="nav navbar-nav level0">
 							<li itemprop="name" data-id="435" data-level="1"><a
-								id="index" itemprop="url" class="" href="index.jsp"
+								id="index" itemprop="url" class="" href="../goods/index.php"
 								data-target="#">首页 </a></li>
 							<li itemprop="name" data-id="510" data-level="1"><a
 								id="jingying" itemprop="url" class=""
-								href="goodsList.jsp?type=14" data-target="#">图书类</a></li>
+								href="../goods/goodsList?type=1" data-target="#">图书类</a></li>
 
 							<li itemprop="name" data-id="510" data-level="1"><a
-								id="wenyi" itemprop="url" class="" href="goodsList.jsp?type=15"
+								id="wenyi" itemprop="url" class="" href="../goods/goodsList?type=2"
 								data-target="#">家电类</a></li>
 
 							<li itemprop="name" data-id="510" data-level="1"><a
-								id="jiaoyu" itemprop="url" class="" href="goodsList.jsp?type=16"
+								id="jiaoyu" itemprop="url" class="" href="../goods/goodsList?type=3"
 								data-target="#">服装类</a></li>
 							<li itemprop="name" data-id="510" data-level="1"><a
 								id="shenghuo" itemprop="url" class=""
-								href="goodsList.jsp?type=17" data-target="#">电子类</a></li>
+								href="../goods/goodsList?type=4" data-target="#">电子类</a></li>
 						</ul>
 					</div>
 

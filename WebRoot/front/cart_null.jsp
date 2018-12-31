@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>我的购物车-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
 								<div class="table-responsive cart-info" style="margin-bottom:50px;">您的购物车为空！</div>
 								<div class="buttons">
 									<div class="pull-left">
-										<a href="index.jsp" class="btn btn-primary btn-default">继续购物</a>
+										<a href="../goods/index.php" class="btn btn-primary btn-default">继续购物</a>
 									</div>
 
 								</div>

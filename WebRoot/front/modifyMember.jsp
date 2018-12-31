@@ -38,7 +38,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>图书列表-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
 </head>
 
 <body>
@@ -168,7 +168,7 @@
 	<%@ include file="common-footer.jsp"%>
 	<!-- //版权栏 -->
 </body>
-<script src="js/jquery.1.3.2.js" type="text/javascript"></script>
+<script src="../front/js/jquery.1.3.2.js" type="text/javascript"></script>
 <script>
 	function regis() {
 

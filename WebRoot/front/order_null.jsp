@@ -5,8 +5,8 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>我的购物车-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
-<link rel="stylesheet" href="css/mr-02.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-02.css" type="text/css">
 
 </head>
 

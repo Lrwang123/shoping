@@ -1,39 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.sql.ResultSet"%><%-- 导入java.sql.ResultSet类 --%>
-<%-- 创建com.tools.ConnDB类的对象 --%>
-<jsp:useBean id="conn" scope="page" class="com.tools.ConnDB" />
-<%
-	String type = request.getParameter("type");
-	String typeName = "";
-	if (type.equals("14")) {
-		typeName = "图书类";
-	}
-	if (type.equals("15")) {
-		typeName = "家电类";
-	}
-	if (type.equals("16")) {
-		typeName = "服装类";
-	}
-	if (type.equals("17")) {
-		typeName = "电子类";
-	}
-
-	ResultSet rs = conn
-			.executeQuery("select * from tb_goods t1,tb_subType t2 where t1.typeID=t2.ID and t2.superType="
-					+ Integer.parseInt(type) + " order by INTime Desc");
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>图书列表-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
 
-<script src="js/jsArr01.js" type="text/javascript"></script>
-<script src="js/module.js" type="text/javascript"></script>
-<script src="js/jsArr02.js" type="text/javascript"></script>
-<script src="js/tab.js" type="text/javascript"></script>
+<script src="../front/js/jsArr01.js" type="text/javascript"></script>
+<script src="../front/js/module.js" type="text/javascript"></script>
+<script src="../front/js/jsArr02.js" type="text/javascript"></script>
+<script src="../front/js/tab.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -57,56 +35,27 @@
 							<div id="content_oc" class="col-sm-12">
 								<div class="box_oc">
 									<div class="box-heading">
-										<h1 class="mrshop_heading_h1"><%=typeName%></h1>
+										<h1 class="mrshop_heading_h1">${typeName }</h1>
 									</div>
 									<div class="box-content">
 										<hr>
 										<div class="row">
-											<%
-												String str = (String) request.getParameter("Page");
-												if (str == null) {
-													str = "0";
-												}
-												int pagesize = 12;
-												rs.last();
-												int RecordCount = rs.getRow();
-												int maxPage = 0;
-												maxPage = (RecordCount % pagesize == 0) ? (RecordCount / pagesize) : (RecordCount / pagesize + 1);
-
-												int Page = Integer.parseInt(str);
-												if (Page < 1) {
-													Page = 1;
-												} else {
-													if (Page > maxPage) {
-														Page = maxPage;
-													}
-												}
-												rs.absolute((Page - 1) * pagesize + 1);
-												for (int i = 1; i <= pagesize; i++) {
-													int ID = rs.getInt("ID");
-													String goodsName = rs.getString("goodsName");
-													String introduce = rs.getString("introduce");
-													String picture = rs.getString("picture");
-													String TypeName = rs.getString("TypeName");
-													float nowPrice = rs.getFloat("nowPrice");
-													String newgoods = rs.getInt("newgoods") == 0 ? "否" : "是";
-													String sale = rs.getInt("sale") == 0 ? "否" : "是";
-											%>
-
+											
+											<c:forEach items="${goodsList }" var="product">
 											<div
 												class="product-layout product-grid col-lg-3 col-md-3 col-sm-6 col-xs-12">
 												<div class="product-thumb">
 													<div class="actions">
 														<div class="image">
-															<a style="width: 95%" href="goodsDetail.jsp?ID=<%=ID%> "><img
-																src="../images/goods/<%=picture%>"
+															<a style="width: 95%" href="goodsDetail?productId=${product.productId } "><img
+																src="../images/goods/${product.image }"
 																class="img-responsive"> </a>
 														</div>
 														<div class="button-group btn-grid">
 															<div class="cart">
 																<button class="btn btn-primary btn-primary"
 																	type="button" data-toggle="tooltip"
-																	onclick='javascript:window.location.href="cart_add.jsp?goodsID=<%=ID%>&num=1"; '
+																	onclick='javascript:window.location.href="..cart/cartAdd?goodsID=${product.productId }&num=1"; '
 																	style="display: none; width: 33.3333%;"
 																	data-original-title="添加到购物车">
 																	<i class="fa fa-shopping-cart"></i>
@@ -123,13 +72,13 @@
 													<div>
 														<div class="caption">
 															<div class="name">
-																<a href="goodsDetail.jsp?ID=<%=ID%>" style="width: 95%">
-																	<span style="color: #0885B1">名称：</span><%=goodsName%></a>
+																<a href="goodsDetail?productId=${product.productId }" style="width: 95%">
+																	<span style="color: #0885B1">名称：</span>${product.name }</a>
 															</div>
 
 															<p class="price">
-																<span class="price-new">分类：</span> <span><%=TypeName%></span>
-																<span class="price-tax">价格: <%=nowPrice%>元
+																<span class="price-new">分类：</span> <span>${product.categoryDetail.name }</span>
+																<span class="price-tax">价格: ${product.priceNow }元
 																</span>
 															</p>
 														</div>
@@ -137,34 +86,31 @@
 													</div>
 												</div>
 											</div>
-											<%
-												try {
-														if (!rs.next()) {
-															break;
-														}
-													} catch (Exception e) {
-													}
-												}
-											%>
+											</c:forEach>
+											
 										</div>
 										<div class="row pagination">
 											<table width="100%" border="0" cellspacing="0"
 												cellpadding="0">
 												<tr>
-													<td height="30" align="right">当前页数：[<%=Page%>/<%=maxPage%>]&nbsp;
-														<%
-															if (Page > 1) {
-														%> <a href="goodsList.jsp?Page=1&type=<%=type%>">第一页</a> <a
-														href="goodsList.jsp?Page=<%=Page - 1%>&type=<%=type%>">上一页</a>
-														<%
-															}
-															if (Page < maxPage) {
-														%> <a
-														href="goodsList.jsp?Page=<%=Page + 1%>&type=<%=type%>">下一页</a>
-														<a href="goodsList.jsp?Page=<%=maxPage%>&type=<%=type%>">最后一页&nbsp;</a>
-														<%
-															}
-														%>
+													<td height="30" align="right">当前页数：[${pageNow }/${pageMax }]&nbsp;
+														<!-- 如果当前不是第一页，显示第一页和上一页 -->
+														<c:choose>
+															<c:when test="${pageNow > 1 }">
+																<a href="goodsList?Page=1&type=${type }">第一页</a> 
+																<a href="goodsList?Page=${pageNow-1 }&type=${type }">上一页</a>
+															</c:when>
+															<c:otherwise/>
+														</c:choose>
+														<!-- 如果不是最后一页，显示下一页和最后一页 -->
+														<c:choose>
+															<c:when test="${pageNow < pageMax }">
+																<a href="goodsList?Page=${pageNow+1 }&type=${type }">下一页</a>
+																<a href="goodsList?Page=${pageMax }&type=${type }">最后一页&nbsp;</a>
+														
+															</c:when>
+															<c:otherwise/>
+														</c:choose>
 													</td>
 												</tr>
 											</table>
@@ -178,9 +124,7 @@
 			</div>
 			<!-- //分页显示图书列表 -->
 			<!-- 显示左侧热门商品 -->
-			<jsp:include page="leftHotGoods.jsp">
-				<jsp:param name="type" value="<%=type%>" />
-			</jsp:include>
+			<%@ include file="leftHotGoods.jsp" %>
 			<!-- // 显示左侧热门商品 -->
 		</div>
 	</div>

@@ -1,34 +1,18 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.sql.ResultSet"%><%-- 导入java.sql.ResultSet类 --%>
-<%@ page import="java.util.Vector"%><%-- 导入Java的向量类 --%>
-<%@ page import="java.text.DecimalFormat"%><%-- 导入格式化数字的类 --%>
-<%@ page import="com.model.Goodselement"%><%-- 导入购物车商品的模型类 --%>
-<%-- 创建com.tools.ConnDB类的对象 --%>
-<jsp:useBean id="conn" scope="page" class="com.tools.ConnDB" />
-<%
-	String username = (String) session.getAttribute("username");//获取会员账号
-	//如果没有登录，将跳转到登录页面
-	if (username == "" || username == null) {
-		response.sendRedirect("login.jsp");//重定向页面到会员登录页面
-		return;//返回
-	} else {
-		Vector cart = (Vector) session.getAttribute("cart");//获取购物车对象
-		if (cart == null || cart.size() == 0) {//如果购物车为空
-			response.sendRedirect("cart_null.jsp");//重定向页面到购物车为空页面
-		} else {
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>我的购物车-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
 
-<script src="js/jsArr01.js" type="text/javascript"></script>
-<script src="js/module.js" type="text/javascript"></script>
-<script src="js/jsArr02.js" type="text/javascript"></script>
-<script src="js/tab.js" type="text/javascript"></script>
+<script src="../front/js/jsArr01.js" type="text/javascript"></script>
+<script src="../front/js/module.js" type="text/javascript"></script>
+<script src="../front/js/jsArr02.js" type="text/javascript"></script>
+<script src="../front/js/tab.js" type="text/javascript"></script>
 
 </head>
 
@@ -60,44 +44,23 @@
 										</thead>
 										<tbody>
 										<!-- 遍历购物车中的商品并显示 -->
-											<%
-												float sum = 0;
-												DecimalFormat fnum = new DecimalFormat("#,##0.0");//定义显示金额的格式
-												int ID = -1;//保存商品ID的变量
-												String goodsname = "";//保存商品名称的变量
-												String picture = "";//保存商品图片的变量
-												//遍历购物车中的商品
-												for (int i = 0; i < cart.size(); i++) {
-													Goodselement goodsitem = (Goodselement) cart.elementAt(i);//获取一个商品
-													sum = sum + goodsitem.number * goodsitem.nowprice;//计算总计金额
-													ID = goodsitem.ID;//获取商品ID
-													if (ID > 0) {
-														ResultSet rs_goods = conn.executeQuery("select * from tb_goods where ID=" + ID);
-														if (rs_goods.next()) {
-															goodsname = rs_goods.getString("goodsname");//获取商品名称
-															picture = rs_goods.getString("picture");//获取商品图片
-														}
-														conn.close();//关闭数据库的连接
-													}
-											%>
 											<!-- 显示一条商品信息 -->
-											<tr>
-												<td class="text-center image" width="20%"><a href="goodsDetail.jsp?ID=<%=goodsitem.ID%>">
-													<img width="80px" src="../images/goods/<%=picture%>"> </a></td>
+											<c:set var="sum" value="0"/><!-- 存储总价 -->
+											<c:forEach items="${cart.list }" var="item" varStatus="index">
+												<tr>
+												<td class="text-center image" width="20%"><a href="../goods/goodsDetail?productId=${item.product.productId }">
+													<img width="80px" src="../images/goods/${item.product.image }"> </a></td>
 												<td class="text-left name"><a
-													href="goodsDetail.jsp?ID=<%=goodsitem.ID%>"> <%=goodsname%></a>
+													href="../goods/goodsDetail?productId=${item.product.productId }"> ${item.product.name }</a>
 												</td>
-												<td class="text-left quantity"><%=goodsitem.number%>件</td>
-												<td class="text-right price"><%=goodsitem.nowprice%>元</td>
-												<td class="text-right total"><%=(goodsitem.nowprice * goodsitem.number)%>元
-												</td>
-											</tr>
+												<td class="text-left quantity">${item.num }件</td>
+												<td class="text-right price">${item.product.priceNow }元</td>
+												<td class="text-right total">${item.product.priceNow * item.num }元</td>
+												<c:set var="sum" value="${sum + item.product.priceNow * item.num }"/>
+												</tr>
+											</c:forEach>
 											<!-- 显示一条商品信息 -->
-											<%
-												}
-												String sumString = fnum.format(sum);//格式化总计金额
-											%>
-											<!-- //遍历购物车中的商品并显示 -->
+										<!-- //遍历购物车中的商品并显示 -->
 										</tbody>
 									</table>
 								</div>
@@ -110,7 +73,7 @@
 												<tr >
 												<span>
 													<strong>总计:</strong>
-													<p><%=sumString%>元</p>
+													<p>${sum }元</p>
 												</span>
 												</tr>
 											</tbody>
@@ -187,7 +150,7 @@
 								<br /> <br />
 								<div class="buttons">
 									<div class="pull-left">
-										<a href="index.jsp" class="btn btn-primary btn-default">继续购物</a>
+										<a href="../goods/index.php" class="btn btn-primary btn-default">继续购物</a>
 									</div>
 									<div class="pull-left">
 										<a href="cart_clear.jsp" class="btn btn-primary btn-default">清空购物车</a>
@@ -210,9 +173,9 @@
 	<!-- //版权栏 -->
 
 	<!-- 使用jBox插件实现一个支付对话框 -->
-	<script type="text/javascript" src="js/jBox/jquery-1.4.2.min.js"></script>
-	<script type="text/javascript" src="js/jBox/jquery.jBox-2.3.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="js/jBox/Skins2/Pink/jbox.css" />
+	<script type="text/javascript" src="../front/js/jBox/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../front/js/jBox/jquery.jBox-2.3.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="../front/js/jBox/Skins2/Pink/jbox.css" />
 	<script type="text/javascript">
 		function zhifu() {
 			//验证收货人姓名
@@ -268,6 +231,6 @@
 	<!-- // 使用jBox插件实现一个支付对话框 -->
 </body>
 </html>
-<%	}
-		}
+<%	
+		
 %>

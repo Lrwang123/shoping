@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openlab.dao.CommonDao">
+	
+	<!-- 业务查找 -->
+	<select id="getUserByUsername" resultMap="User">
+		SELECT * FROM user WHERE username=#{username} AND password=#{password}
+	</select>
+	<select id="getTopProductByCategoryId" resultMap="Product">
+		SELECT * FROM product 
+			WHERE category_detail_id IN 
+				(SELECT category_detail_id 
+					FROM category_detail 
+					WHERE category_id=#{categoryId})
+			LIMIT 7
+	</select>
+	<select id="getPromotionProduct" resultMap="Product">
+		SELECT * FROM product
+			WHERE is_promotion=1 
+			LIMIT 12
+	</select>
+	<select id="getNewProduct" resultMap="Product">
+		SELECT * FROM product
+			ORDER BY create_date DESC
+			LIMIT 12
+	</select>
+	<select id="getHotProduct" resultMap="Product">
+		SELECT * FROM product
+			ORDER BY hit DESC
+			LIMIT 2
+	</select>
+	<select id="getHotProduct7" resultMap="Product">
+		SELECT * FROM product
+			ORDER BY hit DESC
+			LIMIT 7
+	</select>
+	<select id="getProductByCategoryId" resultMap="Product">
+		SELECT * FROM product
+			WHERE category_detail_id IN 
+				(SELECT category_detail_id 
+					FROM category_detail 
+					WHERE category_id=#{categoryId})
+			LIMIT #{start},#{num}
+	</select>
+	<select id="getProductTotalQuantity" resultType="int">
+		SELECT COUNT(product_id) 
+			FROM product 
+			WHERE category_detail_id IN
+				(SELECT category_detail_id 
+					FROM category_detail 
+					WHERE category_id=#{categoryId})
+	</select>
+	<select id="getSearchResult" resultMap="Product">
+		SELECT * FROM product
+			WHERE name LIKE CONCAT('%',#{searchWord},'%') OR info LIKE CONCAT('%',#{searchWord},'%')
+			LIMIT #{start}, #{num}
+	</select>
+	<select id="getSearchTotalQuantity" resultType="int">
+		SELECT COUNT(product_id) 
+			FROM product 
+			WHERE name LIKE CONCAT('%',#{searchWord},'%') OR info LIKE CONCAT('%',#{searchWord},'%')
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	<!-- 基本查找~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<select id="getOrdersByUsername" resultMap="Order">
+		SELECT * FROM `order` WHERE username=#{username}
+	</select>
+	<select id="getOrderDetailsByOrderId" resultMap="OrderDetail">
+		SELECT * FROM order_detail WHERE order_id=#{orderId}
+	</select>
+	<select id="getProductByProductId" resultMap="Product">
+		SELECT * FROM product WHERE product_id=#{productId}
+	</select>
+	<select id="getCategoryDetailByCategoryDetailId" resultMap="CategoryDetail">
+		SELECT * FROM category_detail WHERE category_detail_id=#{categoryDetailId}
+	</select>
+	<select id="getCategoryByCategoryId" resultMap="Category">
+		SELECT * FROM category WHERE category_id=#{categoryId}
+	</select>
+	
+	<!-- 映射配置~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<resultMap id="User" type="com.openlab.domain.UserBean">
+		<id property="userId" column="user_id"/>
+		<result property="username" column="username"/>
+		<result property="name" column="name"/>
+		<result property="password" column="password"/>
+		<result property="city" column="city"/>
+		<result property="idNum" column="id_num"/>
+		<result property="grade" column="grade"/> 
+		<result property="account" column="account"/>
+		<result property="tel" column="tel"/>
+		<result property="email" column="email"/>
+		<collection property="orders" column="username" ofType="OrderBean" 
+			select="getOrdersByUsername"/>
+	</resultMap>
+	
+	<resultMap id="Order" type="OrderBean">
+		<id property="orderId" column="order_id"/>
+		<result property="categoryNum" column="category_num"/>
+		<result property="username" column="username"/>
+		<result property="consignee" column="consignee"/>
+		<result property="consigneeAddress" column="consignee_adress"/>
+		<result property="tel" column="tel"/>
+		<result property="createDate" column="create_date"/>
+		<result property="comment" column="comment"/>
+		<collection property="orderDetails" column="order_id" ofType="OrderDetailBean"
+			select="getOrderDetailsByOrderId"/>
+	</resultMap>
+	
+	<resultMap id="OrderDetail" type="OrderDetailBean">
+		<id property="orderDetailId" column="order_detail_id"/>
+		<result property="orderId" column="order_id"/>
+		<result property="productId" column="product_id"/>
+		<result property="price" column="price"/>
+		<result property="num" column="num"/>
+		<association property="product" column="product_id" javaType="ProductBean" 
+			select="getProductByProductId"/>
+	</resultMap>
+	 
+	<resultMap id="Product" type="ProductBean">
+		<id property="productId" column="product_id"/>
+		<result property="categoryDetailId" column="category_detail_id"/>
+		<result property="name" column="name"/>
+		<result property="info" column="info"/>
+		<result property="price" column="price"/>
+		<result property="priceNow" column='price_now'/>
+		<result property="image" column="image"/>
+		<result property="createDate" column="create_date"/>
+		<result property="isNew" column="is_new"/>
+		<result property="isPromotion" column="is_promotion"/>
+		<result property="hit" column="hit"/>
+		<association property="categoryDetail" column="category_detail_id" javaType="CategoryDetailBean"
+			select="getCategoryDetailByCategoryDetailId"/>
+	</resultMap>
+	
+	<resultMap id="CategoryDetail" type="CategoryDetailBean">
+		<id property="categoryDetailId" column="category_detail_id"/>
+		<result property="categoryId" column="category_id"/>
+		<result property="name" column="name"/>
+		<association property="category" column="category_id" javaType="CategoryBean"
+			select="getCategoryByCategoryId"/>
+	</resultMap>
+	
+	<resultMap id="Category" type="CategoryBean">
+		<id property="categoryId" column="category_id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+</mapper>

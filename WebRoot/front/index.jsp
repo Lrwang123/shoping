@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -7,11 +8,11 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>首页-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
-<script src="js/jsArr01.js" type="text/javascript"></script>
-<script src="js/module.js" type="text/javascript"></script>
-<script src="js/jsArr02.js" type="text/javascript"></script>
-<script src="js/tab.js" type="text/javascript"></script>
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
+<script src="../front/js/jsArr01.js" type="text/javascript"></script>
+<script src="../front/js/module.js" type="text/javascript"></script>
+<script src="../front/js/jsArr02.js" type="text/javascript"></script>
+<script src="../front/js/tab.js" type="text/javascript"></script>
 
 </head>
 
@@ -34,16 +35,16 @@
 									<div class="slideshow">
 										<div id="slidershow" class="nivoSlider">
 											<a href="#" class="nivo-imageLink" style="display: block;"><img
-												src="images/img1.png" class="img-responsive"
+												src="../front/images/img1.png" class="img-responsive"
 												style="display: none;"> </a> <a href="#"
 												class="nivo-imageLink" style="display: none;"> <img
-												src="images/img2.png" class="img-responsive"
+												src="../front/images/img2.png" class="img-responsive"
 												style="display: none;">
 											</a> <a href="#" class="nivo-imageLink" style="display: none;">
-												<img src="images/img3.png" class="img-responsive"
+												<img src="../front/images/img3.png" class="img-responsive"
 												style="display: none;">
 											</a> <a href="#" class="nivo-imageLink" style="display: none;">
-												<img src="images/img4.png" class="img-responsive"
+												<img src="../front/images/img4.png" class="img-responsive"
 												style="display: none;">
 											</a>
 										</div>
@@ -75,14 +76,14 @@
 								<div class="container_oc">
 									<div class="box_oc">
 										<!-- 循环显示热门商品 ：添加两条商品信息-->
-
+										<c:forEach items="${hotProduct }" var="product">
 										<div class="box-product product-grid">
 											<div>
 												<div class="image">
-													<a href="goodsDetail.jsp?ID=61"><img src="../images/goods/60.jpg" width="250px"></a>
+													<a href="goodsDetail.jsp?ID=61"><img src="../images/goods/${product.image }" width="250px"></a>
 													</a>
 												</div>
-												<div class="name"><a href="goodsDetail.jsp?ID=61">Sony/索尼 BDV-N9200WL</a></div>
+												<div class="name"><a href="goodsDetail?productId=${product.productId }">${product.name }</a></div>
 												<!-- 星级评分条 -->
 												<div class="rating">
 													<span class="fa fa-stack"><i
@@ -104,13 +105,13 @@
 												<!-- // 星级评分条 -->
 												<!-- 商品价格 -->
 												<div class="price">
-													<span class="price-new">价格：7038.0  元
+													<span class="price-new">价格：${product.price }  元
 													</span>
 												</div>
 												<!-- // 商品价格 -->
 											</div>
 										</div>
-
+										</c:forEach>
 										<!-- // 循环显示热门商品 ：添加两条商品信息-->
 									</div>
 								</div>
@@ -141,18 +142,19 @@
 								<div class="container_oc">
 									<div class="row">
 										<!-- 循环显示最新上架商品 ：添加12条商品信息-->
+												<c:forEach items="${newProduct }" var="product">
 												<div
 													class="product-grid col-lg-2 col-md-3 col-sm-6 col-xs-12">
 													<div class="product-thumb transition">
 														<div class="actions">
 															<div class="image">
-																<a href="goodsDetail.jsp?ID=56">
-																<img src="../images/goods/55.jpg" alt="asus/华硕 G11" class="img-responsive"></a>
+																<a href="goodsDetail?productId=${product.productId }">
+																<img src="../images/goods/${product.image }" alt="${product.info }" class="img-responsive"></a>
 															</div>
 															<div class="button-group">
 																<div class="cart">
 																	<button class="btn btn-primary btn-primary" type="button" data-toggle="tooltip"
-																		onclick='javascript:window.location.href="cart_add.jsp?goodsID=56&num=1"; '
+																		onclick='javascript:window.location.href="../cart/cartAdd?goodsID=${product.productId}&num=1"; '
 																		style="display: none; width: 33.3333%;" data-original-title="加入到购物车">
 																		<i class="fa fa-shopping-cart"></i>
 																	</button>
@@ -161,12 +163,13 @@
 														</div>
 														<div class="caption">
 															<div class="name" style="height: 40px">
-																<a href="goodsDetail.jsp?ID=56"> <span style="color: #0885B1">商品名：</span>  asus/华硕 G11</a>
+																<a href="goodsDetail?productId=${product.productId }"> <span style="color: #0885B1">商品名：</span>  ${product.name }</a>
 															</div>
-															<div class="name" style="margin-top: 10px"><p class="price">价格：5899.0元</p></div>
+															<div class="name" style="margin-top: 10px"><p class="price">价格：${product.price }元</p></div>
 														</div>
 													</div>
 												</div>
+												</c:forEach>
 										<!-- //循环显示最新上架商品：添加12条商品信息 -->
 									</div>
 								</div>
@@ -181,18 +184,19 @@
 							<div class="container_oc">
 								<div class="row">
 									<!-- 循环显示打折商品 ：添加12条商品信息-->
+										<c:forEach items="${promotionProduct }" var="product">
 										<div
 													class="product-grid col-lg-2 col-md-3 col-sm-6 col-xs-12">
 													<div class="product-thumb transition">
 														<div class="actions">
 															<div class="image">
-																<a href="goodsDetail.jsp?ID=49 "><img src="../images/goods/48.jpg"
-																	alt="Asus/华硕 顽石4代" class="img-responsive"> </a>
+																<a href="goodsDetail?productId=${product.productId } "><img src="../images/goods/${product.image }"
+																	alt="${product.info }" class="img-responsive"> </a>
 															</div>
 															<div class="button-group">
 																<div class="cart">
 																	<button class="btn btn-primary btn-primary" type="button" data-toggle="tooltip"
-																		onclick='javascript:window.location.href="cart_add.jsp?goodsID=49&num=1"; '
+																		onclick='javascript:window.location.href="../cart/cartAdd?goodsID=${product.productId}&num=1"; '
 																		style="display: none; width: 33.3333%;" data-original-title="加入到购物车">
 																		<i class="fa fa-shopping-cart"></i>
 																	</button>
@@ -201,15 +205,16 @@
 														</div>
 														<div class="caption">
 															<div class="name" style="height: 40px">
-																<a href="goodsDetail.jsp?ID=49"
-																	style="width: 95%"> <span style="color: #0885B1">商品名：</span>Asus/华硕 顽石4代</a>
+																<a href="goodsDetail?productId=${product.productId }"
+																	style="width: 95%"> <span style="color: #0885B1">商品名：</span>${product.name }</a>
 															</div>
 															<div class="name" style="margin-top: 10px">
-																<span class="price"> 现价：5000.0 元</span><br> <span class="oldprice">原价：5499.0 元</span>
+																<span class="price"> 现价：${product.priceNow } 元</span><br> <span class="oldprice">原价：${product.price } 元</span>
 															</div>
 														</div>
 													</div>
 												</div>
+												</c:forEach>
 									<!-- 循环显示打折商品 ：添加12条商品信息-->
 								</div>
 							</div>

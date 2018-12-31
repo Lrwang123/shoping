@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>注册-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
 </head>
 
 <body>
@@ -125,7 +125,7 @@
 	<!-- //主体内容 -->
 </body>
 <!-- 验证输入的注册信息是否合法 -->
-<script src="js/jquery.1.3.2.js" type="text/javascript"></script>
+<script src="../front/js/jquery.1.3.2.js" type="text/javascript"></script>
 <script>
 	function regis() {
 		/* ----------- 验证输入的账户是否合法 ------------------------- */

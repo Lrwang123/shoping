@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>登录-51商城</title>
-<link rel="stylesheet" href="css/mr-01.css" type="text/css">
+<link rel="stylesheet" href="../front/css/mr-01.css" type="text/css">
 </head>
 
 <body>
@@ -14,12 +14,12 @@
 			<div id="mr-content" class="mr-content col-xs-12">
 				<div class="login-wrap" style="margin-bottom: 60px; margin-top: 50px">
 					<div style="max-width: 540px; margin: 0 auto;">
-						<a href="index.jsp" title="点击返回首页"><img src="images/51logo.png"></a>
+						<a href="index.jsp" title="点击返回首页"><img src="../front/images/51logo.png"></a>
 					</div>
 					<div class="login">
 						<div class="page-header" style="pause: 0px;"> <h1 class="login_h1">会员登录</h1> </div>
 						<!-- 会员登录表单 -->
-						<form action="login_check.jsp" method="post" class="form-horizontal">
+						<form action="login" method="post" class="form-horizontal">
 							<fieldset>
 								<div class="form-group">
 									<div class="col-sm-4 control-label">
@@ -53,7 +53,7 @@
 											title="验证码区分大小写" size="18" maxlength="4" required="required"
 											aria-required="true"> 
 											<!-- 显示验证码 -->
-											<img src="../CheckCode" name="checkCode" onClick="myReload()" width="116"
+											<img src="checkCode" name="checkCode" onClick="myReload()" width="116"
 	 											height="43" class="img_checkcode" id="img_checkCode" />
 									</div>
 								</div>
