@@ -1,34 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ page import="java.sql.*"%>
-<%@ page import="java.util.Vector"%>
-<%@ page import="com.model.Goodselement"%>
-<jsp:useBean id="conn" scope="page" class="com.tools.ConnDB" />
-<%
-	String username = "";
-	username = (String) session.getAttribute("username");
-	if (username == "" || username == null) {
-		out.println("<script language='javascript'>alert('请先登录!');window.location.href='index.jsp';</script>");
-	} else {
-		ResultSet rs = conn.executeQuery(
-				"select * from tb_order t1,tb_order_detail t2,tb_goods t3 where t2.goodsID=t3.ID and t1.OrderID=t2.orderID and t1.username='"
-						+ username + "' order by t1.OrderDate desc");
-		rs.last();
-		int RecordCount = rs.getRow();
-		if (RecordCount == 0) {
-			out.println("<script language='javascript'>window.location.href='order_null.jsp';</script>");
-			return;
-		}
-		rs.beforeFirst();
-		int orderID = 0;
-		int number = 0;
-		String recevieName = "";
-		String tel = "";
-		String goodsName = "";
-		float price = 0;
-		String orderDate = "";
-%>
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -71,31 +43,21 @@
 												</tr>
 											</thead>
 											<tbody>
-												<%
-													while (rs.next()) {
-															orderID = rs.getInt("orderID");
-															goodsName = rs.getString("goodsName");
-															number = rs.getInt("number");
-															recevieName = rs.getString("recevieName");
-															tel = rs.getString("tel");
-															price = rs.getFloat("price");
-															orderDate = rs.getString("orderDate");
-															orderDate = orderDate.substring(0, 16);
-												%>
+												<c:forEach items="${orders }" var="order">
+												<c:forEach items="${order.orderDetails }" var="orderDetail">
 												<tr>
-													<td class="text-center image" width="10%"><%=orderID%>
+													<td class="text-center image" width="10%">${order.orderId }
 													</td>
-													<td class="text-center name"><%=goodsName%></td>
-													<td class="text-center quantity"><%=number%>件</td>
-													<td class="text-center quantity"><%=price%>元</td>
-													<td class="text-center quantity"><%=number * price%>元</td>
-													<td class="text-center quantity"><%=recevieName%></td>
-													<td class="text-center quantity"><%=tel%></td>
-													<td class="text-center quantity"><%=orderDate%></td>
+													<td class="text-center name">${orderDetail.product.name } </td>
+													<td class="text-center quantity">${orderDetail.num }件</td>
+													<td class="text-center quantity">${orderDetail.price }元</td>
+													<td class="text-center quantity">${orderDetail.price * orderDetail.num }元</td>
+													<td class="text-center quantity">${order.consignee }</td>
+													<td class="text-center quantity">${order.tel }</td>
+													<td class="text-center quantity">${order.createDate }</td>
 												</tr>
-												<%
-													}
-												%>
+												</c:forEach>
+												</c:forEach>
 											</tbody>
 										</table>
 									</div>
@@ -108,7 +70,7 @@
 								<br />
 								<div class="buttons">
 									<div class="pull-right">
-										<a href="index.jsp" class="tigger btn btn-primary btn-primary">继续购物</a>
+										<a href="../goods/index.php" class="tigger btn btn-primary btn-primary">继续购物</a>
 									</div>
 								</div>
 							</div>
@@ -125,7 +87,3 @@
 	<!-- //版权栏 -->
 </body>
 </html>
-<%
-	conn.close();
-	}
-%>

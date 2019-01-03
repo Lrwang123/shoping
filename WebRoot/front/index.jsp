@@ -80,8 +80,7 @@
 										<div class="box-product product-grid">
 											<div>
 												<div class="image">
-													<a href="goodsDetail.jsp?ID=61"><img src="../images/goods/${product.image }" width="250px"></a>
-													</a>
+													<a href="../goods/goodsDetail?productId=${product.productId }"><img src="../images/goods/${product.image }" width="250px"></a>
 												</div>
 												<div class="name"><a href="goodsDetail?productId=${product.productId }">${product.name }</a></div>
 												<!-- 星级评分条 -->

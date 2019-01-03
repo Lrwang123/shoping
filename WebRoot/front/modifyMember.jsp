@@ -1,38 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.sql.ResultSet"%><%-- 导入java.sql.ResultSet类 --%>
-<%-- 创建com.tools.ConnDB类的对象 --%>
-<jsp:useBean id="conn" scope="page" class="com.tools.ConnDB" />
-<jsp:useBean id="chStr" scope="page" class="com.tools.ChStr" /><%-- 创建ChStr类的对象 --%>
-<%
-	String username = (String) session.getAttribute("username");
-	if (username != null && username != "") {
-		String sql = "select * from tb_member where username='" + username + "'";
-		ResultSet rs = conn.executeQuery(sql);
-		int id = -1;
-		String truename = "";
-		String PWD = "";
-		String city = "";
-		String address = "";
-		String postcode = "";
-		String cardNO = "";
-		String cardType = "";
-		String tel = "";
-		String email = "";
-		if (rs.next()) {
-			id = rs.getInt(1);
-			truename = rs.getString(3);
-			System.out.println(truename);
-			PWD = rs.getString(4);
-			city = rs.getString(5);
-			address = rs.getString(6);
-			postcode = rs.getString(7);
-			cardNO = rs.getString(8);
-			cardType = rs.getString(9);
-			tel = rs.getString(12);
-			email = rs.getString(13);
-		}
-%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -56,7 +24,7 @@
 				<div class="registration col-sm-6 col-sm-offset-3">
 
 						<!-- 会员注册表单 -->
-					<form id="member-registration" action="modifyMember_deal.jsp"
+					<form id="member-registration" action="../user/modifyMember"
 						onsubmit="return regis();" method="post"
 						class="form-horizontal">
 
@@ -70,7 +38,7 @@
 									<div class="col-sm-8">
 										<!-- 账户文本框 -->
 										<input type="text" name="username" id="username"
-									value="<%=username%>" class="required" size="38"
+									value="${user.username }" class="required" size="38"
 									aria-required="true"><span class="star">&nbsp;*</span>
 									</div>
 								</div>
@@ -81,8 +49,8 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 输入真实姓名的文本框 -->
-										<input type="text" name="truename" id="jform_username"
-									value="<%=truename%>" class="validate-username required"
+										<input type="text" name="name" id="jform_username"
+									value="${user.name }" class="validate-username required"
 									size="38" aria-required="true"><span
 											class="star">&nbsp;*</span>
 									</div>
@@ -94,7 +62,7 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 密码文本框 -->
-										<input type="password" name="pwd" id="pwd" value=""
+										<input type="password" name="passwordOld" id="pwd" value=""
 									autocomplete="off" class="validate-password required" size="38"
 									maxlength="99" required="required" aria-required="true"><span class="star">&nbsp;*</span>
 									</div>
@@ -108,7 +76,7 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 密码文本框 -->
-										<input type="password" name="newPwd" id="newPwd" value=""
+										<input type="password" name="password" id="newPwd" value=""
 									autocomplete="off" class="validate-password required" size="38"
 									maxlength="99" aria-required="true"><span class="star">&nbsp;*</span>
 									</div>
@@ -120,7 +88,7 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 确认密码文本框 -->
-										<input type="password" name="newPwd2" id="newPwd2"
+										<input type="password" name="password2" id="newPwd2"
 									class="validate-password required" value="" size="38"
 									aria-required="true"><span class="star">*</span>
 									</div>
@@ -133,7 +101,7 @@
 									<div class="col-sm-8" style="clear: none;">
 										<!-- 输入联系电话的文本框 -->
 										<input type="text" name="tel" class="validate-email " id="tel"
-									value="<%=tel%>" size="38" autocomplete="email" aria-required="true">
+									value="${user.tel }" size="38" autocomplete="email" aria-required="true">
 									</div>
 								</div>
 								<div class="form-group">
@@ -144,12 +112,12 @@
 									<div class="col-sm-8" style="clear: none;">
 										<!-- 输入邮箱的文本框 -->
 										<input type="email" name="email" class="validate-email"
-									id="jform_email2" value="<%=email%>" size="38"
+									id="jform_email2" value="${user.email }" size="38"
 									aria-required="true">
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-offset-4 col-sm-8" style="margin-left: 150px;"><input name="ID" type="hidden" value="<%=id%>">
+									<div class="col-sm-offset-4 col-sm-8" style="margin-left: 150px;"><input name="userId" type="hidden" value="${user.userId }">
 										<button type="submit" class="btn btn-primary pull-left" style="width:100px;">提交</button>
 							<button type="button" onclick="javascript:history.go(-1)"
 								class="btn btn-primary pull-left" style="width:100px;">取消</button>
@@ -192,10 +160,3 @@
 	}
 </script>
 </html>
-<%
-	conn.close();
-	} else {
-		out.println(
-				"<script lanage='javascript'>alert('请先登录，再修改个人信息!');window.location.href='index.jsp';</script>");
-	}
-%>

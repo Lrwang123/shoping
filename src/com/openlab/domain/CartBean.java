@@ -46,4 +46,8 @@ public class CartBean {
 		list.add(cartItem);
 	}
 	
+	public void clear() {
+		list.clear();
+	}
+	
 }

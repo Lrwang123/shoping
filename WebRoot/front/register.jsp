@@ -16,14 +16,14 @@
 					style="margin-bottom: 60px; margin-top: 50px">
 					<div style="max-width: 540px; margin: 0 auto;">
 						<a href="index.jsp" title="点击返回首页"><img
-							src="images/51logo.png"></a>
+							src="../front/images/51logo.png"></a>
 					</div>
 					<div class="login">
 						<div class="page-header" style="pause: 0px;">
 							<h1 class="login_h1">会员注册</h1>
 						</div>
 						<!-- 会员注册表单 -->
-						<form id="member-registration" action="register_deal.jsp"
+						<form id="member-registration" action="../user/register"
 							onsubmit="return regis();" method="post" class="form-horizontal">
 
 							<fieldset>
@@ -46,7 +46,7 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 输入真实姓名的文本框 -->
-										<input type="text" name="truename" id="jform_username"
+										<input type="text" name="name" id="jform_username"
 											value="" class="validate-username required" size="38"
 											required="required" aria-required="true"><span
 											class="star">&nbsp;*</span>
@@ -59,7 +59,7 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 密码文本框 -->
-										<input type="password" name="pwd" id="pwd" value=""
+										<input type="password" name="password" id="pwd" value=""
 											autocomplete="off" class="validate-password required"
 											size="38" maxlength="99" required="required"
 											aria-required="true"><span class="star">&nbsp;*</span>
@@ -72,7 +72,7 @@
 									</div>
 									<div class="col-sm-8">
 										<!-- 确认密码文本框 -->
-										<input type="password" name="pwd2" id="pwd2" value=""
+										<input type="password" name="password2" id="pwd2" value=""
 											autocomplete="off" class="validate-password required"
 											size="38" maxlength="99" required="required"
 											aria-required="true"><span class="star">&nbsp;*</span>
@@ -113,7 +113,7 @@
 								<div class="form-group" style="margin: 20px;">
 									<label
 										style="float: right; color: #858585; margin-right: 80px; margin-top: 10px; font-size: 14px;">已有账号！<a
-										href="login.jsp">去登录</a></label>
+										href="../user/login.php">去登录</a></label>
 								</div>
 							</fieldset>
 						</form>

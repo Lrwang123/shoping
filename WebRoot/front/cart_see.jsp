@@ -89,7 +89,7 @@
 							<div id="content_oc" class="col-sm-12">
 								<h1>物流信息</h1>
 								<!-- 填写物流信息的表单 -->
-								<form action="cart_order.jsp" method="post" id="myform">
+								<form action="../cart/addOrder" method="post" id="myform">
 									<div class="table-responsive cart-info">
 										<table class="table table-bordered">
 											<tbody>
@@ -97,7 +97,7 @@
 													<td class="text-right" width="20%">收货人姓名：</td>
 													<td class="text-left quantity">
 														<div class="input-group btn-block" style="max-width: 400px;">
-															<input type="text" id="recevieName" name="recevieName" size="10" class="form-control">
+															<input type="text" id="recevieName" name="consignee" size="10" class="form-control">
 														</div>
 													</td>
 												</tr>
@@ -113,7 +113,7 @@
 													<td class="text-right">收货人地址：</td>
 													<td class="text-left quantity">
 														<div class="input-group btn-block" style="max-width: 400px;">
-															<input type="text" id="address" name="address" size="1" class="form-control">
+															<input type="text" id="address" name="consigneeAddress" size="1" class="form-control">
 														</div>
 													</td>
 												</tr>
@@ -121,7 +121,7 @@
 													<td class="text-right">备注：</td>
 													<td class="text-left quantity">
 														<div class="input-group btn-block" style="max-width: 400px;">
-															<input type="text" name="bz" size="1" class="form-control">
+															<input type="text" name="comment" size="1" class="form-control">
 														</div>
 													</td>
 												</tr>
@@ -142,7 +142,7 @@
 									<table class="table table-bordered">
 										<tbody>
 											<tr>
-												<td class="text-left"><img src="images/zhifubao.png" /></td>
+												<td class="text-left"><img src="../front/images/zhifubao.png" /></td>
 											</tr>
 										</tbody>
 									</table>
@@ -153,7 +153,7 @@
 										<a href="../goods/index.php" class="btn btn-primary btn-default">继续购物</a>
 									</div>
 									<div class="pull-left">
-										<a href="cart_clear.jsp" class="btn btn-primary btn-default">清空购物车</a>
+										<a href="../cart/clear" class="btn btn-primary btn-default">清空购物车</a>
 									</div>
 									<div class="pull-right">
 										<a href="javascript:zhifu();" class="tigger btn btn-primary btn-primary">结账</a>

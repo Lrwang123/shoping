@@ -55,7 +55,7 @@
 															<div class="cart">
 																<button class="btn btn-primary btn-primary"
 																	type="button" data-toggle="tooltip"
-																	onclick='javascript:window.location.href="..cart/cartAdd?goodsID=${product.productId }&num=1"; '
+																	onclick='javascript:window.location.href="../cart/cartAdd?goodsID=${product.productId }&num=1"; '
 																	style="display: none; width: 33.3333%;"
 																	data-original-title="添加到购物车">
 																	<i class="fa fa-shopping-cart"></i>

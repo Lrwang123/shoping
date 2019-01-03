@@ -3,9 +3,25 @@
 <mapper namespace="com.openlab.dao.CommonDao">
 	
 	<!-- 业务查找 -->
-	<select id="getUserByUsername" resultMap="User">
+	<select id="getUserByUsernameAndPassword" resultMap="User">
 		SELECT * FROM user WHERE username=#{username} AND password=#{password}
 	</select>
+	<select id="getUserByUsername" resultMap="User">
+		SELECT * FROM user WHERE username=#{username}	
+	</select>
+	<update id="updateUser">
+		UPDATE user
+			SET username=#{user.username}, name=#{user.name}, password=#{user.password}, tel=#{user.tel}, email=#{user.email}
+			WHERE user_id=#{user.userId} AND password=#{password}
+			LIMIT 1
+	</update>
+	<insert id="insertUser">
+		INSERT INTO user (username, name, password, tel, email)
+			VALUES (#{user.username}, #{user.name}, #{user.password}, #{user.tel}, #{user.email})
+	</insert>
+	<update id="updateHitByProductId">
+		UPDATE product SET hit=hit+1 WHERE product_id=#{productId}
+	</update>
 	<select id="getTopProductByCategoryId" resultMap="Product">
 		SELECT * FROM product 
 			WHERE category_detail_id IN 
@@ -60,10 +76,23 @@
 			FROM product 
 			WHERE name LIKE CONCAT('%',#{searchWord},'%') OR info LIKE CONCAT('%',#{searchWord},'%')
 	</select>
-	
-	
-	
-	
+	<select id="getProductByCategoryIdAndNum" resultMap="Product">
+		SELECT * FROM product
+			WHERE category_detail_id IN 
+				(SELECT category_detail_id 
+					FROM category_detail 
+					WHERE category_id=#{categoryId})
+			LIMIT #{num}
+	</select>
+	<insert id="insertOrder">
+		INSERT INTO `order` (order_id, category_num, username, consignee, consignee_address, tel, create_date, comment)
+			VALUES (#{order.orderId}, #{order.categoryNum}, #{order.username}, #{order.consignee},
+				#{order.consigneeAddress}, #{order.tel}, CURRENT_TIMESTAMP(), #{order.comment})
+	</insert>
+	<insert id="insertOrderDetail">
+		INSERT INTO order_detail (order_id, product_id, price, num)
+			VALUES (#{orderDetail.orderId}, #{orderDetail.productId}, #{orderDetail.price}, #{orderDetail.num})
+	</insert>
 	
 	
 	

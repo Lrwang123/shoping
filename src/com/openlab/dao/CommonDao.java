@@ -16,13 +16,21 @@ import com.openlab.domain.UserBean;
 @Repository
 public interface CommonDao {
 
-	public UserBean getUserByUsername(@Param("username")String username, @Param("password")String password);
+	public UserBean getUserByUsernameAndPassword(@Param("username")String username, @Param("password")String password);
 
+	public UserBean getUserByUsername(@Param("username")String username);
+	
+	public int updateUser(@Param("user")UserBean user, @Param("password")String password);
+	
+	public int insertUser(@Param("user")UserBean user);
+	
 	public List<OrderBean> getOrdersByUsername(@Param("username")String username);
 	
 	public List<OrderDetailBean> getOrderDetailsByOrderId(@Param("orderId")int orderId);
 	
 	public ProductBean getProductByProductId(@Param("productId")int productId);
+	
+	public void updateHitByProductId(@Param("productId")int productId);
 	
 	public CategoryDetailBean getCategoryDetailByCategoryDetailId(@Param("categoryDetailId")int categoryDetailId);
 	
@@ -47,4 +55,10 @@ public interface CommonDao {
 			@Param("num")int num);
 
 	public int getSearchTotalQuantity(@Param("searchWord")String searchWord);
+
+	public List<ProductBean> getProductByCategoryIdAndNum(@Param("categoryId")int categoryId, @Param("num")int num);
+
+	public int insertOrder(@Param("order")OrderBean order);
+
+	public int insertOrderDetail(@Param("orderDetail")OrderDetailBean orderDetail);
 }

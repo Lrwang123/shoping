@@ -2,6 +2,7 @@ package com.openlab.controller;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,18 +34,21 @@ public class GoodsController {
 	}
 	
 	@RequestMapping("/goodsDetail")
-	public ModelAndView goodsDetail(int productId){
+	public ModelAndView goodsDetail(@Param("productId")int productId){
 		ModelAndView mv = new ModelAndView();
 		ProductBean product = commonService.getProductByProductId(productId);
+		if (product == null)
+			throw new RuntimeException("请求的商品不存在！");
+		int relatedNum = 6;
 		mv.addObject("product", product);
 		mv.addObject("leftHotGoods", commonService.getTopProductByCategoryId(product.getCategoryDetail().getCategoryId()));
-		mv.addObject("relatedGoods", commonService.getTopProductByCategoryId(product.getCategoryDetail().getCategoryId()));
+		mv.addObject("relatedGoods", commonService.getProduct(product.getCategoryDetail().getCategoryId(), relatedNum));
 		mv.setViewName("goodsDetail");
 		return mv;
 	}
 	
-	//@param：大类号，起始条目，每页数量
-	//@return：条目总数，起始条目-（起始+每页数量）条产品列，左侧热门商品
+	//@param：大类号，第几页
+	//@model：大类号，第几页，最大页数，num条产品，左侧热门商品
 	@RequestMapping("/goodsList")
 	public ModelAndView goodsList(@RequestParam("type")Integer type, 
 			@RequestParam(value="Page",required=false)Integer page) {
@@ -63,6 +67,8 @@ public class GoodsController {
 		return mv;
 	} 	
 	
+	//@param：关键字，第几页
+	//@model：关键字，第几页，最大页数，num条产品，左侧热门商品	
 	@RequestMapping("/searchResult.php")
 	public ModelAndView searchResult(@RequestParam("searchword")String searchWord, 
 			@RequestParam(value="Page",required=false)Integer page){

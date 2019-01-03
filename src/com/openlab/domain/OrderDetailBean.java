@@ -3,7 +3,7 @@ package com.openlab.domain;
 public class OrderDetailBean {
 
 	private int orderDetailId;
-	private int orderId;
+	private long orderId;
 	private int productId;
 	private double price;
 	private int num;//数量
@@ -21,11 +21,11 @@ public class OrderDetailBean {
 		this.orderDetailId = orderDetailId;
 	}
 
-	public int getOrderId() {
+	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(int orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
 

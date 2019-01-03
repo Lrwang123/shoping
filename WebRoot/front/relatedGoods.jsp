@@ -8,7 +8,7 @@
 		<div class="product-grid transition">
 			<div class="actions">
 				<div class="image">
-					<a href="goodsDetail.jsp?ID=${product.productId }"><img
+					<a href="../goods/goodsDetail?productId=${product.productId }"><img
 						src="../images/goods/${product.image }"> </a>
 				</div>
 				<div class="button-group">
@@ -25,7 +25,7 @@
 			</div>
 			<div class="caption">
 				<div class="name" style="height: 40px">
-					<a style="width: 90%" href="goodsDetail.jsp?ID=${product.productId}"><span
+					<a style="width: 90%" href="../goods/goodsDetail?productId=${product.productId}"><span
 						style="color: #0885B1">名称:</span> ${product.name} </a>
 				</div>
 

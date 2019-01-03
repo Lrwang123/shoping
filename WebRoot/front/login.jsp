@@ -14,7 +14,7 @@
 			<div id="mr-content" class="mr-content col-xs-12">
 				<div class="login-wrap" style="margin-bottom: 60px; margin-top: 50px">
 					<div style="max-width: 540px; margin: 0 auto;">
-						<a href="index.jsp" title="点击返回首页"><img src="../front/images/51logo.png"></a>
+						<a href="../goods/index.php" title="点击返回首页"><img src="../front/images/51logo.png"></a>
 					</div>
 					<div class="login">
 						<div class="page-header" style="pause: 0px;"> <h1 class="login_h1">会员登录</h1> </div>
@@ -66,7 +66,7 @@
 									style="border-top: 1px solid #D9D9D9; margin: 20px;">
 									<label
 										style="float: right; color: #858585; margin-right: 40px; margin-top: 10px; font-size: 14px;">没有账户？<a
-										href="register.jsp">立即注册</a></label>
+										href="../user/register.php">立即注册</a></label>
 								</div>
 							</fieldset>
 						</form>

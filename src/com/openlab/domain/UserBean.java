@@ -2,18 +2,29 @@ package com.openlab.domain;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class UserBean {
 
 	private int userId;
+	@NotNull
 	private String username;
+	@NotNull
 	private String name;
+	@NotNull
 	private String password;
 	private String city;
 	private String address;
 	private String idNum;//身份证号
 	private int grade;//会员积分
 	private double account;//账户余额
+	@NotNull
 	private String tel;
+	@NotNull
+	@Pattern(regexp = "^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)*@"
+			+ "([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$",
+			message="邮件格式错误")
 	private String email;
 	private List<OrderBean> orders;//订单
 	

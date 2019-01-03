@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.openlab.domain.CartBean;
+import com.openlab.domain.OrderBean;
 import com.openlab.domain.ProductBean;
+import com.openlab.domain.UserBean;
 import com.openlab.service.CommonService;
+import com.openlab.tool.CommonTool;
 
 @Controller
 @RequestMapping("/cart")
@@ -43,4 +46,32 @@ public class CartController {
 		mv.setViewName("redirect:cart.php");
 		return mv;
 	}
+	
+	@RequestMapping("clear")
+	public String clear(@SessionAttribute("cart")CartBean cart) {
+		cart.clear();
+		return "redirect:../cart/cart.php";
+	}
+	
+	@RequestMapping("addOrder")
+	public String addOrder(OrderBean order, 
+			@SessionAttribute("cart")CartBean cart,
+			@SessionAttribute("username")String username) {
+		order.setOrderId(CommonTool.getOrderIdByTime());//生成订单号
+		order.setUsername(username);//添加订单所属用户	
+		order.setCategoryNum(cart.getList().size()); //添加订单种类数量
+		commonService.addOrder(order, cart);//插入订单
+		cart.clear();
+		return "redirect:../cart/orderList.php";
+	}
+	
+	@RequestMapping("orderList.php")
+	public ModelAndView orderList(@SessionAttribute("username")String username) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("orderList");
+		UserBean user = commonService.getUser(username);
+		mv.addObject("orders", user.getOrders());
+		return mv;
+	}
+	
 }

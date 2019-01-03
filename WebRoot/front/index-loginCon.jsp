@@ -15,7 +15,7 @@
 				</p>
 			</div>
 			<div class="toolbar-ct-2">
-				<a href="orderList.jsp">我的订单</a>&nbsp;&nbsp; | &nbsp;&nbsp; 我的收藏
+				<a href="../cart/orderList.php">我的订单</a>&nbsp;&nbsp; | &nbsp;&nbsp; 我的收藏
 			</div>
 		</div>
 	</div>
@@ -70,12 +70,12 @@
 			<div class="toolbar-ct-1">
 				<p>
 					<i class="fa fa-phone"></i> <span style="margin-right: 15px;">电话：400-675-1066</span>您好，<%=username%>
-					&nbsp; &nbsp;<a href="modifyMember.jsp">修改</a>&nbsp;&nbsp;
+					&nbsp; &nbsp;<a href="../user/modifyMember.php">修改</a>&nbsp;&nbsp;
 					|&nbsp;&nbsp;<a href="../user/logout">退出</a>
 				</p>
 			</div>
 			<div class="toolbar-ct-2">
-				<a href="orderList.jsp">我的订单</a>&nbsp;&nbsp; | &nbsp;&nbsp; <a
+				<a href="../cart/orderList.php">我的订单</a>&nbsp;&nbsp; | &nbsp;&nbsp; <a
 					href="">我的收藏</a>
 			</div>
 		</div>
