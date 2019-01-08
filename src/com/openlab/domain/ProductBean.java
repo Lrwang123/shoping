@@ -2,17 +2,30 @@ package com.openlab.domain;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class ProductBean {
 
 	private int productId;
+	@NotNull
+	@Min(1)
 	private int categoryDetailId;
+	@NotNull
 	private String name;
+	@NotNull
 	private String info;
+	@NotNull
+	@Min(0)
 	private double price;//原价998
+	@NotNull
+	@Min(0)
 	private double priceNow;//现价只要88
 	private String image;
 	private Timestamp createDate;
+	@NotNull
 	private int isNew;
+	@NotNull
 	private int isPromotion;
 	private int hit;//点击量
 	private CategoryDetailBean categoryDetail;

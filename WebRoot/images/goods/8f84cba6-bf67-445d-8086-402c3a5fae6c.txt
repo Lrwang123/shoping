@@ -1,0 +1,87 @@
+1.核心概念
+	切点，连接点，切面，通知，织入，引入
+	原理:通过动态代理，实现切点的增强
+2.注解方式实现
+	//声明切面
+	@Aspect
+	@Order(0) //声明责任链顺序
+	public class AnnotationAspect {
+		//声明切点，正则表达式语言
+		@Pointcut("execution(* aop.Person.sayHello(..)) || execution(* aop.Person.sayHi(..))")
+		public void print() {
+		}
+		//声明通知，并绑定切点
+		@Before("print()")
+		public void before() {
+			
+			System.out.println("before................................");
+		}
+		
+		@Around("print()")
+		public void around(ProceedingJoinPoint jp) {
+			System.out.println("around before..............................");
+			try {
+				jp.proceed();
+			} catch (Throwable e) {
+				new RuntimeException("回调原有流程，产生异常...................");
+			}
+			System.out.println("around after.................................");
+		}
+		
+		@After("print()")
+		public void after() {
+			System.out.println("after..................................");
+			
+		}
+		@AfterReturning("print()")
+		public void afterReturning() {
+			System.out.println("afterReturning...........................");
+			
+		}
+		
+		@AfterThrowing("print()")
+		public void afterThrowing() {
+			System.out.println("afterThrowing.............................");
+			
+		}
+	}
+	
+	xml配置
+		约束文件:
+			xmlns:aop="http://www.springframework.org/schema/aop"
+				http://www.springframework.org/schema/aop
+				http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		配置:
+			<!-- 开启自动代理 -->
+			<aop:aspectj-autoproxy />
+			
+			<!-- 注册代理切面bean(可用@Component代替) -->
+			<bean id="annotationAspect" class="aop.AnnotationAspect" />
+			
+			<!-- 注册bean(可用@Bean代替) -->
+			<bean id="person" class="aop.Person" p:name="王五" />
+3.xml方式实现
+
+	<!-- 实体bean,只有通过IoC容器得到的bean才会受影响 -->
+	<bean id="person" class="aop2.Person">
+		<property name="name" value="张三"></property>
+	</bean>
+	
+	<!-- 切面代理 -->
+	<bean id="xmlAspect" class="aop2.XmlAspect" />
+	
+	<!-- aop配置 -->
+	<aop:config>
+		<!-- 引用xmlAspect作为切面 -->
+		<aop:aspect ref="xmlAspect">
+			<!-- 定义切点，方便使用(注意:带参数 and args(形参名,形参2)形式传递参数的，
+				切面代理类的方法必须有对应参数，否则会报Xlint:invalidAbsoluteTypeName异常) -->
+			<aop:pointcut id="sayHello" expression="execution(* aop2.Person.sayHello(..)) and args(arg)" />
+			<!-- 绑定切点和通知 -->
+			<aop:before method="before" pointcut-ref="sayHello"/>
+			<aop:around method="around" pointcut-ref="sayHello"/>
+			<aop:after method="after" pointcut-ref="sayHello"/>
+			<aop:after-returning method="afterReturning" pointcut-ref="sayHello"/>
+			<aop:after-throwing method="afterThrowing" pointcut-ref="sayHello"/>
+		</aop:aspect>
+	</aop:config>

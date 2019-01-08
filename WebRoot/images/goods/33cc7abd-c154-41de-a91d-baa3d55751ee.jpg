@@ -1,0 +1,126 @@
+1.Mybatis是什么，功能和作用？
+	Mybatis是一款持久层框架。
+	可以将数据库中的记录映射为Java中的对象，避免了JDBC代码中手工设置参数和获取结果集的繁琐的操作。
+	简化了数据库操作过程，提高了效率。
+
+2.Mybatis代替了JDBC哪些功能？用什么手段代替的？
+	Mybatis将整个JDBC的底层实现封装了起来，实现了JDBC加载驱动、建立连接和执行操作的过程。
+	同时实现对象封装。
+	
+3.mybatis的工作流程/各组件的功能和生命周期
+	工作流程
+	3.1.InputStream input = Resources.getResourceAsStream("mybatis_config.xml");
+		提取主配置文件的输出流,
+	3.2.SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(input);
+		将输出流导入SqlSessionFactoryBuilder,建立SqlSessionFactory；
+	3.3.SqlSession sqlSession = sqlSessionFactory.open();
+		从SqlSessionFactory中获取sqlSession,
+	3.4.BlogMapper blogMapper = sqlSession.getMapper(BlogMapper.class);
+		通过SqlSession加载映射器实例；
+	3.5.BlogBean blog = blogMapper.getBlogById(1);
+		通过映射器实例进行操作；
+	
+	各组件功能和生命周期：
+	SqlSessionFactoryBuilder:用于加载配置文件，生成SqlSessionFactory,完成即可丢弃；
+	SqlSessionFactory:用于打开SqlSession连接，最好不要重复创建多次，生命周期与应用等同；
+	SqlSession:用于执行已映射的sql语句，非线程安全，生命周期应为请求或方法的持续时间，用完即关闭；
+	映射器实例:用于执行已映射的sql语句,生命周期与SqlSession相同；
+	
+4.sql语句的注意事项
+	4.1.结尾没有分号；
+	4.2.关键字最好大写；
+	4.3.传参数的三种方法:
+		4.3.1.简单类型按下标取：#{0}，#{1}；
+		4.3.2.传对象直接取属性:(UserBean user) #{id}，#{name};
+		4.3.3.通过@Param注解传值:(@Param("id") int id, @Param("password") String password)  #{id},#{password};
+	4.4.mapper.xml之间使用命名空间名相互引用
+5.动态Sql
+	使用动态sql标签实现sql语句的动态拼接：
+		1.if语句
+			<select>
+			  SELECT * FROM blog_user WHERE username=#{username}
+				<if test="#{nickname} != null">
+				  AND nickname="#{nickname}"
+				</if>
+			</select>
+		2.if+where语句
+			<select>
+			  SELECT * FROM blog_user
+				<where>
+				  <if test="#{username}!=null">username=#{username}</if>
+				  <if test="#{nickname}!=null">AND nickname=#{nickname}</if>
+				</where>
+			</select>
+		3.if+set语句
+			<update>
+			  UPDATE blog 
+				<set>
+				  <if test="#{username}!=null">username=#{username},</if>
+				  <if test="#{password}!=null">password=#{password},</if>
+				  <if test="#{nickname}!=null">nickname=#{nickname},</if>
+				</set>
+				WHERE id=#{id}
+			</update>
+		4.choose（when，otherwise）
+			<select>
+			  SELECT count(id) FROM blog_user WHERE
+				<choose>
+				  <when test="#{username}!=null and #{password}!=null">
+					username=#{username} and password=#{password}
+				  </when>
+				  <otherwise>
+					FALSE
+				  </otherwise>
+				</choose>
+			</select>
+		5.trim 语句
+			<select>
+			  SELECT * FROM blog_user
+				<trim prifix="WHERE" prefixOverrides="AND | OR">
+				  <if test="#{username}!=null>AND TRUE</if>
+				  <if test="#{username}!=null>AND FALSE</if>
+				  <if test="#{username}!=null>OR TRUE</if>
+				  <if test="#{username}!=null>OR FALSE</if>
+				</trim>
+			</select>
+		6.sql片段
+			<select id="getBlogByUserId">
+			  select * from blog where user_id = #{user_id}
+			</select>
+			<select>
+			  select count(title) from 
+				(<include refid="getBlogByUserId" />)
+			</select>
+		7.foreach 语句
+			<select>
+			  SELECT * FROM blog_user where id in
+				<foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+				  #{id}
+				</foreach>
+			</select>
+
+6.缓存:
+	优点:缓存中有的查询结果不会重复查询，增加了效率，减少了数据库压力；
+	缺点:不正确使用可能会引起“脏读“等BUG；
+	分为一级缓存和二级缓存和自定义缓存；
+		一级缓存:默认开启，作用域为SqlSession实例，不同SqlSession实例相互隔离，与SqlSession实例共生命周期；
+		二级缓存:默认关闭，作用域为同一映射器类，需要在主配置文件和Mapper配置文件中都设置；
+			配置方法:主配置文件<configuration>下的<settings>标签中:<setting name="cacheEnabled" value="true"/>	
+						映射器配置文件<mapper>标签下：<cache>具体的配置选项(不写会加载默认配置)</cache>
+		自定义缓存:实现 org.apache.ibatis.cache.Cache 接口，编写自己的缓存池；
+		
+7.高级映射
+	通过resultMap中绑定查询出来的列名和属性名，完成对复杂对象的映射；
+	基本类型和String
+	 <result property="password" column="hashed_password"/>
+	对象
+	 <association property="orderUser" column="order_user_id" javaType="OrderUser" select="selectOrderUserByOrderUserId"></association>
+	合集
+	 <collection property="orderDetails" column="id" ofType="OrderDetail" select="selectOrderDetailByOrderId"></collection>
+
+8.延迟加载
+	在高级映射的基础上，对于复杂对象未被使用到的成员对象，合集等，先不进行加载，直到使用时在进行；(需要配置)
+	减少了查询量，配合递归，甚至于可以实现所有对象关系的映射；
+	配置方法:主配置文件<configuration>下的<settings>标签中:
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>

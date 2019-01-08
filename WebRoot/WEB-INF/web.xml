@@ -24,7 +24,7 @@
   	<load-on-startup>1</load-on-startup>
   	<!-- 文件上传配置 -->
   	<multipart-config>
-  		<location>d:/</location>
+  		<location>E:\WorkSpace\MyEclipse\shoping\WebRoot\images\goods</location>
   		<max-file-size>5242880</max-file-size>
   		<max-request-size>10485760</max-request-size>
   		<file-size-threshold>0</file-size-threshold>
@@ -46,6 +46,11 @@
         <url-pattern>*.eot</url-pattern>
         <url-pattern>*.ttf</url-pattern>
         <url-pattern>*.svg</url-pattern>
+        <url-pattern>*.GIF</url-pattern>
+        <url-pattern>*.JPG</url-pattern>
+        <url-pattern>*.gif</url-pattern>
+        <url-pattern>*.JS</url-pattern>
+        
     </servlet-mapping>
     
     <filter>

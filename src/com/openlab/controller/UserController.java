@@ -45,7 +45,7 @@ public class UserController {
 
 	@RequestMapping("/login.php")
 	public String loginPage() {
-		return "login";
+		return "front/login";
 	}
 
 	@RequestMapping("/login")
@@ -85,14 +85,14 @@ public class UserController {
 	
 	@RequestMapping("/register.php")
 	public String getRegisterPage() {
-		return "register";
+		return "front/register";
 	}
 
 	@RequestMapping("/register")
 	@ResponseBody
 	public String register(@Valid UserBean user, Errors errors) {
 		if (errors.hasErrors()){
-			throw new RuntimeException(errors.getFieldError().getDefaultMessage());
+			throw new RuntimeException(errors.getFieldError().getField()+":"+errors.getFieldError().getDefaultMessage());
 		}
 		boolean res = commonService.register(user);
 		if (res == true) {
@@ -106,7 +106,7 @@ public class UserController {
 	public String getModifyMemberPage(Model model,
 			@SessionAttribute("username") String username) {
 		model.addAttribute("user", commonService.getUser(username));
-		return "modifyMember";
+		return "front/modifyMember";
 	}
 	
 	@RequestMapping("modifyMember")
@@ -123,7 +123,8 @@ public class UserController {
 
 	@RequestMapping("test")
 	@ResponseBody
-	public String test(HttpServletRequest request){
+	public String test(HttpServletRequest request, @RequestParam("text1")String text1){
+		System.out.println(text1);
 		MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest)request;
 		MultipartFile file = mhsr.getFile("file");
 		String fileName = file.getOriginalFilename();

@@ -43,12 +43,7 @@
 	<select id="getHotProduct" resultMap="Product">
 		SELECT * FROM product
 			ORDER BY hit DESC
-			LIMIT 2
-	</select>
-	<select id="getHotProduct7" resultMap="Product">
-		SELECT * FROM product
-			ORDER BY hit DESC
-			LIMIT 7
+			LIMIT #{num}
 	</select>
 	<select id="getProductByCategoryId" resultMap="Product">
 		SELECT * FROM product
@@ -93,7 +88,41 @@
 		INSERT INTO order_detail (order_id, product_id, price, num)
 			VALUES (#{orderDetail.orderId}, #{orderDetail.productId}, #{orderDetail.price}, #{orderDetail.num})
 	</insert>
-	
+	<select id="countProductQuantity" resultType="int">
+		SELECT COUNT(*) FROM product
+	</select>
+	<select id="getAllProduct" resultMap="Product">
+		SELECT * FROM product LIMIT #{start},#{num}
+	</select>
+	<select id="getCategoryDetailByCategoryId" resultMap="CategoryDetail">
+		SELECT * FROM category_detail WHERE category_id=#{categoryId}
+	</select>
+	<select id="getAllCategory" resultMap="Category">
+		SELECT * FROM category
+	</select>
+	<insert id="insertProduct">
+		INSERT INTO product (category_detail_id, name, info, price, price_now, image, create_date, is_new, is_promotion)
+			VALUES (#{product.categoryDetailId}, #{product.name}, #{product.info}, #{product.price}, #{product.priceNow},
+				#{product.image}, CURRENT_TIMESTAMP(), #{product.isNew}, #{product.isPromotion})
+	</insert>
+	<insert id="insertCategory">
+		INSERT INTO category (name) VALUES (#{name})
+	</insert>
+	<select id="getAllCategoryDetail" resultMap="CategoryDetail">
+		SELECT * FROM category_detail
+	</select>
+	<insert id="insertCategoryDetail">
+		INSERT INTO category_detail (category_id, name) VALUES (#{categoryId}, #{name})
+	</insert>
+	<select id="countAllUser" resultType="int">
+		SELECT COUNT(*) FROM user
+	</select>
+	<select id="selectAllUser" resultMap="User">
+		SELECT * FROM user LIMIT #{start}, #{limit}
+	</select>
+	<update id="updateUserGrade">
+		UPDATE user SET grade=grade+#{grade} WHERE username=#{username}
+	</update>
 	
 	
 	<!-- 基本查找~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

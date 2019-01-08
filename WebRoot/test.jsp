@@ -25,6 +25,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
     <form method="post" action="user/test" enctype="multipart/form-data">
     	<input type="file" name="file" value="请选择文件"/>
+    	<br>
+    	<input type="text" name="text1" value="">
     	<input type="submit" value="提交"/>
     </form>
   </body>

@@ -12,6 +12,7 @@ import com.openlab.dao.CommonDao;
 import com.openlab.domain.CartBean;
 import com.openlab.domain.CartItemBean;
 import com.openlab.domain.CategoryBean;
+import com.openlab.domain.CategoryDetailBean;
 import com.openlab.domain.OrderBean;
 import com.openlab.domain.OrderDetailBean;
 import com.openlab.domain.ProductBean;
@@ -32,14 +33,14 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.getUserByUsername(username);
 	}
 	
-	public ProductBean getProductByProductId(int productId) {
+	public ProductBean getProduct(int productId) {
 		ProductBean product = commonDao.getProductByProductId(productId);
 		if (product != null)
 			commonDao.updateHitByProductId(productId);
 		return product;
 	}
 
-	public List<ProductBean> getTopProductByCategoryId(int categoryId) {
+	public List<ProductBean> getTopProduct(int categoryId) {
 		return commonDao.getTopProductByCategoryId(categoryId);
 	}
 
@@ -51,15 +52,11 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.getNewProduct();
 	}
 
-	public List<ProductBean> getHotProduct() {
-		return commonDao.getHotProduct();
+	public List<ProductBean> getHotProduct(int num) {
+		return commonDao.getHotProduct(num);
 	}
 	
-	public List<ProductBean> getHotProduct7() {
-		return commonDao.getHotProduct7();
-	}
-
-	public List<ProductBean> getProductByCategoryId(int categoryId, int start, int num) {
+	public List<ProductBean> getProduct(int categoryId, int start, int num) {
 		return commonDao.getProductByCategoryId(categoryId, start, num);
 	}
 
@@ -94,6 +91,7 @@ public class CommonServiceImpl implements CommonService {
 	
 	@Transactional(propagation=Propagation.REQUIRES_NEW, isolation=Isolation.SERIALIZABLE, timeout=3)
 	public boolean addOrder(OrderBean order, CartBean cart) {
+		double totalMoney = 0;
 		commonDao.insertOrder(order);
 		OrderDetailBean orderDetail = new OrderDetailBean();
 		orderDetail.setOrderId(order.getOrderId());
@@ -102,8 +100,65 @@ public class CommonServiceImpl implements CommonService {
 			orderDetail.setPrice(cartItem.getProduct().getPriceNow());
 			orderDetail.setNum(cartItem.getNum());
 			commonDao.insertOrderDetail(orderDetail);
+			totalMoney += orderDetail.getPrice() * orderDetail.getNum();
 		}
+		commonDao.updateUserGrade(order.getUsername(), (int)Math.floor(totalMoney));
 		return true;
+	}
+
+	@Override
+	public int getProductTotalQuantity() {
+		return commonDao.countProductQuantity();
+	}
+
+	@Override
+	public List<ProductBean> getAllProduct(int start, int num) {
+		return commonDao.getAllProduct(start, num);
+	}
+
+	@Override
+	public List<CategoryDetailBean> getCategoryDetailByCategoryId(int categoryId) {
+		return commonDao.getCategoryDetailByCategoryId(categoryId);
+	}
+
+	@Override
+	public CategoryDetailBean getCategoryDetail(int categoryDetailId) {
+		return commonDao.getCategoryDetailByCategoryDetailId(categoryDetailId);
+	}
+
+	@Override
+	public List<CategoryBean> getAllCategory() {
+		return commonDao.getAllCategory();
+	}
+
+	@Override
+	public boolean addProduct(ProductBean product) {
+		return commonDao.insertProduct(product) > 0;
+	}
+
+	@Override
+	public boolean addCategory(String name) {
+		return commonDao.insertCategory(name) > 0;
+	}
+
+	@Override
+	public List<CategoryDetailBean> getAllCategoryDetail() {
+		return commonDao.getAllCategoryDetail();
+	}
+
+	@Override
+	public boolean addCategoryDetail(int categoryId, String name) {
+		return commonDao.insertCategoryDetail(categoryId, name) > 0;
+	}
+
+	@Override
+	public int countAllUser() {
+		return commonDao.countAllUser();
+	}
+
+	@Override
+	public List<ProductBean> getAllUser(int start, int limit) {
+		return commonDao.selectAllUser(start, limit);
 	}
 
 	

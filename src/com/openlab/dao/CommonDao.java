@@ -42,10 +42,8 @@ public interface CommonDao {
 
 	public List<ProductBean> getNewProduct();
 
-	public List<ProductBean> getHotProduct();
+	public List<ProductBean> getHotProduct(@Param("num")int num);
 	
-	public List<ProductBean> getHotProduct7();
-
 	public List<ProductBean> getProductByCategoryId(@Param("categoryId")int categoryId, 
 			@Param("start")int start, @Param("num")int num);
 
@@ -61,4 +59,26 @@ public interface CommonDao {
 	public int insertOrder(@Param("order")OrderBean order);
 
 	public int insertOrderDetail(@Param("orderDetail")OrderDetailBean orderDetail);
+
+	public int countProductQuantity();
+
+	public List<ProductBean> getAllProduct(@Param("start")int start, @Param("num")int num);
+
+	public List<CategoryDetailBean> getCategoryDetailByCategoryId(@Param("categoryId")int categoryId);
+
+	public List<CategoryBean> getAllCategory();
+
+	public int insertProduct(@Param("product")ProductBean product);
+
+	public int insertCategory(@Param("name")String name);
+
+	public List<CategoryDetailBean> getAllCategoryDetail();
+
+	public int insertCategoryDetail(@Param("categoryId")int categoryId, @Param("name")String name);
+
+	public int countAllUser();
+
+	public List<ProductBean> selectAllUser(@Param("start")int start, @Param("limit")int limit);
+
+	public int updateUserGrade(@Param("username")String username, @Param("grade")int grade);
 }
